@@ -30,10 +30,26 @@
 
 using namespace std;
 
-int eigen[5] = { -1, 2, 3, 1, -3 };
+void characterize(int* eigen, char* nn) {
+	int l = strlen(nn);
+	for (int i = 0; i < l; ++i) {
+		int nk = nn[i] - '0';
+		int r = nk % 7;
+		if (r<4) {
+			eigen[i] = r;
+		} else if (r >= 4) {
+			eigen[i] = r - 7;
+		}
+	}
+	return;
+}
 
-const int nmrk = 69384;
-const int krmn = 48396;
+void print(int* eigen, int l) {
+	for (int i = 0; i <l ;++i) {
+		cout <<eigen[i]<<"\t,\t";
+	}
+	cout <<"\n";
+}
 
 int main() {
 	/* Step 1: Reading the Number to be factorized */
@@ -47,8 +63,15 @@ int main() {
 	cout << "\nNumber read was : \t" << num <<"\n";
 	char* nn = strdup((char*) num.c_str());
 	int l = strlen(nn);
-	fclose(fp);
-	free(nn);
-	return 0;
+	int* eigen = new int[l];
+	for (int i  = 0; i <l ; ++i) {
+	eigen[i] = 0;
+	}
+characterize(eigen, nn);
+cout <<"\nEigenvector:\n";
+print(eigen, l);
+fclose(fp);
+free(nn);
+return 0;
 }
 
