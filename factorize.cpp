@@ -35,6 +35,15 @@ int eigen[5] = { -1, 2, 3, 1, -3 };
 const int nmrk = 69384;
 const int krmn = 48396;
 
+void factorizeEQ5(char* nn) {
+}
+
+void factorizeLT5(char* nn) {
+}
+
+void factorizeGT5(char* nn) {
+}
+
 int main() {
 	/* Step 1: Reading the Number to be factorized */
 	FILE* fp = fopen("./input.txt", "r");
@@ -47,6 +56,13 @@ int main() {
 	cout << "\nNumber read was : \t" << num <<"\n";
 	char* nn = strdup((char*) num.c_str());
 	int l = strlen(nn);
+	if (l == 5) {
+		factorizeEQ5(nn);
+	} else if (l < 5) {
+		factorizeLT5(nn);
+	} else {
+		factorizeGT5(nn);
+	}
 	fclose(fp);
 	free(nn);
 	return 0;
