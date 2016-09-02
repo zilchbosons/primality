@@ -35,11 +35,9 @@ void characterize(int* eigen, char* nn) {
 	for (int i = 0; i < l; ++i) {
 		int nk = nn[i] - '0';
 		int r = nk % 7;
-		if (r<5) {
+		if (r<4) {
 			eigen[i] = r;
-		} else if (r == 5) {
-			eigen[i] = 0;
-		} else if (r > 5) {
+		} else if (r >= 4) {
 			eigen[i] = r - 7;
 		}
 	}
