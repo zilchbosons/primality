@@ -70,14 +70,30 @@ long double getMultiplier(int x, long int divisor) {
 	return nmrk / divisor;
 }
 
-void factorizeEQ5(char* nn) {
+char* factorizeEQ5(char* nn) {
+	int num = atoi(nn);
+	std::string num2 = "";
+	for (int i = 0 ; i < 5; ++i) {
+		int nk = nn[i] - '0';
+		if ((nk + signature[i])<0) {
+			nk = nk + (7 + signature[i]);
+		} else {
+			nk = nk + signature[i];
+		}
+		num2 += boost::lexical_cast<std::string>(nk);
+	}
+	long int num3 = atoi((char*) num2.c_str());
+	long double acc = log(num3)*log(69384);
+	acc += log(lossFor1Cyc);
+	char* factor = strdup((char*) boost::lexical_cast<std::string>(floor(acc)).c_str());
+	return factor;
 }
 
 char* factorizeLT5(char* nn) {
 	long double acc = 0;
 	int num = atoi(nn);
 	for (int i = 0 ; i < 5; ++i) {
-		long double term = (num < signature[i])? (num+ (7-signature[i])):(num - signature[i]);
+		long double term = ((num + signature[i]) <0) ? (num+ (7+ signature[i])):(num + signature[i]);
 		long double multiplier = getMultiplier(i, divLT5);
 		acc += log(term)*log(multiplier);
 	}
@@ -103,7 +119,10 @@ int main() {
 	char* nn = strdup((char*) num.c_str());
 	int l = strlen(nn);
 	if (l == 5) {
-		factorizeEQ5(nn);
+		char* factor = factorizeEQ5(nn);
+		if (factor) {
+			cout << "\nFactor:\t"<<factor<<"\n";
+		}
 	} else if (l < 5) {
 		char* factor = factorizeLT5(nn);
 		if (factor) {
