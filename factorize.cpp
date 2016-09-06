@@ -110,7 +110,24 @@ char* factorizeLT5(char* nn) {
 	return strdup((char*) result.c_str());
 }
 
-char* factorizeGT5(char* nn) {
+std::string gFac = "";
+
+std::string factorizeGT5(char* nn, int i, int l) {
+	if (i >= l) return gFac; 
+	int remLen = l - 1 - i;
+	if (remLen > 5) {
+		char* subVec =  new char[6];
+		strncpy(subVec, nn+i, 5) ;
+		subVec[5] = '\0';
+		char* factor = factorize(subVec);
+		gFac += factor;
+		gFac += factorizeGT5(nn+5, i+5, l); 
+	} else if (remLen == 5) {
+		gFac += factorize(nn);
+	} else {
+		gFac += factorizeLT5(nn);
+	}
+	return gFac;
 }
 
 int main() {
@@ -136,10 +153,8 @@ int main() {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
 	} else {
-		char* factor = factorizeGT5(nn);
-		if (factor) {
-			cout << "\nFactor:\t"<<factor<<"\n";
-		}
+		std::string factor = factorizeGT5(nn, 0, l);
+		cout << "\nFactor:\t"<<factor<<"\n";
 	}
 	fclose(fp);
 	free(nn);
