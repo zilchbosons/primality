@@ -75,7 +75,9 @@ char* factorizeEQ5(char* nn) {
 	std::string num2 = "";
 	for (int i = 0 ; i < 5; ++i) {
 		int nk = nn[i] - '0';
-		if ((nk + signature[i])<0) {
+		if (num + signature[i] > 9) {
+			nk = nk - (7 - signature[i]);
+		} else if  ((nk + signature[i])<0) {
 			nk = nk + (7 + signature[i]);
 		} else {
 			nk = nk + signature[i];
@@ -93,7 +95,7 @@ char* factorizeLT5(char* nn) {
 	long double acc = 0;
 	int num = atoi(nn);
 	for (int i = 0 ; i < 5; ++i) {
-		long double term = ((num + signature[i]) <0) ? (num+ (7+ signature[i])):(num + signature[i]);
+		long double term = (num + signature[i] > 9)? (num - (7 - signature[i])):((num + signature[i]) <0) ? (num+ (7+ signature[i])):(num + signature[i]);
 		long double multiplier = getMultiplier(i, divLT5);
 		acc += log(term)*log(multiplier);
 	}
