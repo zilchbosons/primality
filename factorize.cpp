@@ -99,9 +99,11 @@ char* factorizeEQ5(char* nn) {
 char* factorizeLT5(char* nn) {
 	long double acc = 0;
 	int num = atoi(nn);
+	int l = strlen(nn);
+	long int mult = divLT5 / pow(10, l-1);
 	for (int i = 0 ; i < 5; ++i) {
 		long double term = (num + signature[i] > 9)? (num - (7 - signature[i])):((num + signature[i]) <0) ? (num+ (7+ signature[i])):(num + signature[i]);
-		long double multiplier = getMultiplier(i, divLT5);
+		long double multiplier = getMultiplier(i, mult);
 		acc += log(term)*log(multiplier);
 	}
 	acc = acc / log(nmrk);
@@ -113,19 +115,37 @@ char* factorizeLT5(char* nn) {
 std::string gFac = "";
 
 std::string factorizeGT5(char* nn, int i, int l) {
-	if (i >= l) return gFac; 
-	int remLen = l - 1 - i;
+	int remLen = (l - i);
+	if (remLen < 5) {
+		return gFac;
+	}
 	if (remLen > 5) {
 		char* subVec =  new char[6];
 		strncpy(subVec, nn+i, 5) ;
+		cout <<"\nSubvec1:\t"<<subVec<<"\n";
 		subVec[5] = '\0';
 		char* factor = factorize(subVec);
 		gFac += factor;
-		gFac += factorizeGT5(nn+5, i+5, l); 
+		delete [] subVec;
+		return  factorizeGT5(nn, i+1, l); 
 	} else if (remLen == 5) {
-		gFac += factorize(nn);
+		char* subVec =  new char[6];
+		strncpy(subVec, nn+i, 5) ;
+		cout <<"\nSubvec2:\t"<<subVec<<"\n";
+		subVec[5] = '\0';
+		char* factor = factorize(subVec);
+		gFac += factor;
+		delete [] subVec;
+		return gFac;
 	} else {
-		gFac += factorizeLT5(nn);
+		char* subVec =  new char[remLen + 1];
+		strncpy(subVec, nn+i, remLen) ;
+		cout <<"\nSubvec3:\t"<<subVec<<"\n";
+		subVec[remLen] = '\0';
+		char* factor = factorizeLT5(subVec);
+		gFac += factor;
+		delete [] subVec;
+		return gFac;
 	}
 	return gFac;
 }
