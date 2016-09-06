@@ -33,58 +33,12 @@ using namespace std;
 int eigen[5] = { -1, 2, 3, 1, -3 };
 
 const int nmrk = 69384;
-const int mrkn = 93846;
-const int rknm = 38469;
-const int knmr = 84693;
-const int lossFor1Cyc = 4;
-
-#define divLT5 10000
-
-int signature[5] = { -1, 2, 3, 1, -3 };
-
-long double getMultiplier(int x, long int divisor) {
-	switch (x) {
-		case 0:
-			return nmrk / divisor;
-			break;
-		case 1:
-			return mrkn / divisor;
-			break;
-
-		case 2:
-			return rknm / divisor;
-			break;
-
-		case 3:
-			return knmr / divisor;
-			break;
-
-		case 4:
-			return nmrk / divisor;
-			break;
-
-		default:
-			return nmrk / divisor;
-			break;
-	}
-	return nmrk / divisor;
-}
+const int krmn = 48396;
 
 void factorizeEQ5(char* nn) {
 }
 
-char* factorizeLT5(char* nn) {
-	long double acc = 0;
-	int num = atoi(nn);
-	for (int i = 0 ; i < 5; ++i) {
-		long double term = (num < signature[i])? (num+ (7-signature[i])):(num - signature[i]);
-		long double multiplier = getMultiplier(i, divLT5);
-		acc += log(term)*log(multiplier);
-	}
-	acc = acc / log(nmrk);
-	acc += log(lossFor1Cyc);
-	std::string result = boost::lexical_cast<std::string>(floor(acc));
-	return strdup((char*) result.c_str());
+void factorizeLT5(char* nn) {
 }
 
 void factorizeGT5(char* nn) {
@@ -105,10 +59,7 @@ int main() {
 	if (l == 5) {
 		factorizeEQ5(nn);
 	} else if (l < 5) {
-		char* factor = factorizeLT5(nn);
-		if (factor) {
-			cout << "\nFactor:\t"<<factor<<"\n";
-		}
+		factorizeLT5(nn);
 	} else {
 		factorizeGT5(nn);
 	}
