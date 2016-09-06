@@ -103,7 +103,7 @@ char* factorizeLT5(char* nn) {
 	return strdup((char*) result.c_str());
 }
 
-void factorizeGT5(char* nn) {
+char* factorizeGT5(char* nn) {
 }
 
 int main() {
@@ -129,7 +129,10 @@ int main() {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
 	} else {
-		factorizeGT5(nn);
+		char* factor = factorizeGT5(nn);
+		if (factor) {
+			cout << "\nFactor:\t"<<factor<<"\n";
+		}
 	}
 	fclose(fp);
 	free(nn);
