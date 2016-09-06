@@ -70,12 +70,12 @@ long double getMultiplier(int x, long int divisor) {
 	return nmrk / divisor;
 }
 
-char* factorizeEQ5(char* nn) {
+char* factorize(char* nn) {
 	int num = atoi(nn);
 	std::string num2 = "";
 	for (int i = 0 ; i < 5; ++i) {
 		int nk = nn[i] - '0';
-		if (num + signature[i] > 9) {
+		if (nk + signature[i] > 9) {
 			nk = nk - (7 - signature[i]);
 		} else if  ((nk + signature[i])<0) {
 			nk = nk + (7 + signature[i]);
@@ -84,7 +84,12 @@ char* factorizeEQ5(char* nn) {
 		}
 		num2 += boost::lexical_cast<std::string>(nk);
 	}
-	long int num3 = atoi((char*) num2.c_str());
+	return strdup((char*) num2.c_str());
+}
+
+char* factorizeEQ5(char* nn) {
+	char*  snum3 = factorize(nn);
+	long int num3 = atoi(snum3);
 	long double acc = log(num3)*log(69384);
 	acc += log(lossFor1Cyc);
 	char* factor = strdup((char*) boost::lexical_cast<std::string>(floor(acc)).c_str());
