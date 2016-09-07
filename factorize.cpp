@@ -90,7 +90,7 @@ char* factorize(char* nn) {
 }
 
 
-char* factorizeLT5(char* nn) {
+char* factorizeEQ1(char* nn) {
 	long double acc = 0;
 	int num = atoi(nn);
 	int l = strlen(nn);
@@ -116,14 +116,37 @@ char* factorizeEQ5(char* nn) {
 	mpz_set_ui(at, roundOff(acc));
 	char* fctr = strdup(mpz_get_str(0, 10, at));
 	mpz_clear(at);
-	char* factor2 = factorizeLT5(fctr);
+	char* factor2 = factorizeEQ1(fctr);
 	int corr =atoi(factor2);
 	acc += corr;
 	char* factor = strdup((char*) boost::lexical_cast<std::string>(roundOff(acc)).c_str());
 	return factor;
 }
 
-std::string factorizeGT5(char* nn, int i, int l) {
+char* factorize125(char* nn) {
+	long double acc = 0;
+	int num = atoi(nn);
+	int l = strlen(nn);
+	long int mult = divLT5 / pow(10, l);
+	for (int i = 0 ; i < 5; ++i) {
+		long double term = (num + signature[i] > 9)? ((num-10) + signature[i]):((num + signature[i]) <0) ? ((10-num)+signature[i]):(num + signature[i]);
+		if (term == 0) term = 29;
+		long double multiplier = getMultiplier(i, mult);
+		acc += log(term)*log(multiplier);
+	}
+	mpz_t at;
+	mpz_init(at);
+	mpz_set_ui(at, roundOff(acc));
+	char* fctr = strdup(mpz_get_str(0, 10, at));
+	mpz_clear(at);
+	char* factor2 = factorizeEQ1(fctr);
+	int corr =atoi(factor2);
+	acc += corr;
+	char* factor = strdup((char*) boost::lexical_cast<std::string>(roundOff(acc)).c_str());
+	return factor;
+}
+
+std::string factorizeGT1(char* nn, int i, int l) {
 	return gFac;
 }
 
@@ -144,13 +167,19 @@ int main() {
 		if (factor) {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
-	} else if (l < 5) {
-		char* factor = factorizeLT5(nn);
+	} else  if (l == 1) {
+		char* factor = factorizeEQ1(nn);
 		if (factor) {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
+	} else if (l >1 && l < 5) {
+		char* factor = factorize125(nn);
+		if (factor) {
+			cout << "\nFactor:\t"<<factor<<"\n";
+		}
+
 	} else {
-		std::string factor = factorizeGT5(nn, 0, l);
+		std::string factor = factorizeGT1(nn, 0, l);
 		cout << "\nFactor:\t"<<factor<<"\n";
 	}
 	fclose(fp);
