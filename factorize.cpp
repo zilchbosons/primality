@@ -71,7 +71,6 @@ long double getMultiplier(int x, long int divisor) {
 }
 
 char* factorize(char* nn, int l, int offset) {
-	int num = atoi(nn);
 	std::string num2 = "";
 	for (int i = offset ; i < offset+l; ++i) {
 		int nk = nn[i-offset] - '0';
@@ -123,19 +122,59 @@ char* toString(vector<int> original) {
 	return strdup((char*) str.c_str());
 }
 
+void print(char** matrix, int l) {
+	for (int i = 0; i < l; ++i) {
+		cout << matrix[i]<<"\n";
+	}
+	cout <<"\n";
+}
+
+int* toMask(char* mask) {
+	int l = strlen(mask);
+	int* result = new int[l];
+	for (int i = 0 ; i < l; ++i ) {
+		int mk = mask[i]-'0';
+		if (mk > 3) {
+			result[i] = mk-7;
+		} else {
+			result[i] = mk;
+		}
+	}
+	return result;
+}
+
+char* factorizeN(char* nn, int* mask, int sz) {
+	std::string num2 = "";
+	for (int i = 0 ; i < sz; ++i) {
+		int nk = nn[i] - '0';
+		if (nk + mask[i] > 9) {
+			nk = (nk-10) +  mask[i];
+		} else if  ((nk + mask[i])<0) {
+			nk = (10-nk) +  mask[i];
+		} else {
+			nk = nk + mask[i];
+		}
+		num2 += boost::lexical_cast<std::string>(nk);
+	}
+	return strdup((char*) num2.c_str());
+}
+
 char* factorizeGT5(char* nn) {
 	int l = strlen(nn);
 	vector<int> original;
 	for (int i = 0; i <l; ++i) {
-		original.push_back(signature[i% 5]);
+		original.push_back(eigen[i% 5]);
 	}
 	char* matrix[l];
 	for (int i = 0; i < l; ++i ) {
 		matrix[i] = new char[l+1];
-		matrix[i] = factorize(toString(original), original.size(), i);
+		matrix[i] = factorizeN(nn, toMask(toString(original)), original.size());
 		matrix[i][l] = '\0';
-		std::rotate(original.begin(), original.begin() + 1, original.end());
+		cout << "\noriginal:\t"<<toString(original)<<"\n";
+		std::rotate(original.rbegin(), original.rbegin() + 1, original.rend());
 	}
+	cout <<"\nMatrix:\n";
+	print(matrix, l) ;
 }
 
 char* factorizeLEQ5(char* nn) {
@@ -187,8 +226,7 @@ int main() {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
 	} else {
-		std::string factor = factorizeGT5(nn);
-		cout << "\nFactor:\t"<<factor<<"\n";
+		factorizeGT5(nn);
 	}
 	fclose(fp);
 	free(nn);
