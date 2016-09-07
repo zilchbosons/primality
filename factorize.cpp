@@ -27,6 +27,7 @@
 #include <vector>
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
+#include <iomanip>
 #include "common.hpp"
 
 using namespace std;
@@ -209,7 +210,7 @@ char* process(char* s, mpfr_exp_t expt) {
 
 void print(vector<char*> v) {
 	for (int i = 0; i < v.size(); ++i) {
-		cout << v[i]<<"\n";
+		cout << "\nTransition of \t"<<i<<"\t,\t"<<i+1<<"\t,\t"<<setprecision(10)<<atof(v[i])<<"\n";
 	}
 	cout <<"\n";
 }
@@ -288,10 +289,8 @@ char* factorizeGT5(char* nn) {
 #endif
 	vector<char*> indexVector;
 	generateSums(matrix, original_matrix, l, indexVector);
-#ifdef _DEBUG
 	cout << "\nIndex Vector:\n";
 	print(indexVector);
-#endif
 }
 
 char* factorizeLEQ5(char* nn) {
