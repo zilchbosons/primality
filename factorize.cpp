@@ -127,7 +127,9 @@ char* factorizeLEQ5(char* nn) {
 	for (int i = 0; i < l; ++i) {
 		std::rotate(ns.begin(), ns.begin()+1, ns.end());
 		char* tmp = strdup((char*) ns.c_str());
+#ifdef _DEBUG
 		cout << "\ntmp:\t"<<tmp<<"\n";
+#endif
 		char* f = factorizeEQ5(tmp);
 		acc+=atoi(f);
 		free(tmp);
