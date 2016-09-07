@@ -30,7 +30,7 @@
 
 using namespace std;
 
-int eigen[5] = { -1, 2, 3, 1, -3 };
+int eigen[5] = { 6, 9, 3, 8, 4 };
 
 const int nmrk = 69384;
 const int mrkn = 93846;
@@ -106,7 +106,6 @@ char* factorizeEQ1(char* nn) {
 	return strdup((char*) result.c_str());
 }
 
-std::string gFac = "";
 char* factorizeEQ5(char* nn) {
 	int l = strlen(nn);
 	char*  snum3 = factorize(nn, l, 0);
@@ -116,8 +115,27 @@ char* factorizeEQ5(char* nn) {
 	return factor;
 }
 
-std::string factorizeGT1(char* nn, int i, int l) {
-	return gFac;
+char* toString(vector<int> original) {
+	std::string str = "";
+	for (int i = 0; i < original.size(); ++i ) {
+		str += boost::lexical_cast<std::string>(original[i]);
+	}
+	return strdup((char*) str.c_str());
+}
+
+char* factorizeGT5(char* nn) {
+	int l = strlen(nn);
+	vector<int> original;
+	for (int i = 0; i <l; ++i) {
+		original.push_back(signature[i% 5]);
+	}
+	char* matrix[l];
+	for (int i = 0; i < l; ++i ) {
+		matrix[i] = new char[l+1];
+		matrix[i] = factorize(toString(original), original.size(), i);
+		matrix[i][l] = '\0';
+		std::rotate(original.begin(), original.begin() + 1, original.end());
+	}
 }
 
 char* factorizeLEQ5(char* nn) {
@@ -169,7 +187,7 @@ int main() {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
 	} else {
-		std::string factor = factorizeGT1(nn, 0, l);
+		std::string factor = factorizeGT5(nn);
 		cout << "\nFactor:\t"<<factor<<"\n";
 	}
 	fclose(fp);
