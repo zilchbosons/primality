@@ -160,7 +160,52 @@ char* factorizeN(char* nn, int* mask, int sz) {
 	return strdup((char*) num2.c_str());
 }
 
-void generateSums(char** matrix, char** original_matrix, int l ) {
+char* process(char* s, mpfr_exp_t expt) {
+	int l = strlen(s);
+	std::string result = "";
+	if (l <= 7) {
+		int ix = atoi(s);
+		if (ix == 0) {
+			result = boost::lexical_cast<std::string>(ix);
+		}
+	} else {
+		if (s[0] == '-') {
+			result += '-';
+			++s;
+			char* tmp = new char[strlen(s)+1];
+			tmp[strlen(s)] = '\0';
+			strncpy(tmp, s, expt);
+			result += tmp;
+			result += '.';
+			s += expt;
+			strncpy(tmp, s, strlen(s));
+			tmp[strlen(s)]='\0';
+			result += tmp;
+			delete [] tmp;
+		} else {
+			char* tmp = new char[strlen(s)+1];
+			tmp[strlen(s)] = '\0';
+			strncpy(tmp, s, expt);
+			result += tmp;
+			result += '.';
+			s += expt;
+			strncpy(tmp, s, strlen(s));
+			tmp[strlen(s)]='\0';
+			result += tmp;
+			delete [] tmp;
+		}
+	}
+	return strdup((char*)result.c_str());
+}
+
+void print(vector<char*> v) {
+	for (int i = 0; i < v.size(); ++i) {
+		cout << v[i]<<"\n";
+	}
+	cout <<"\n";
+}
+
+void generateSums(char** matrix, char** original_matrix, int l, vector<char*>& indexVector ) {
 	mpfr_t m_item;
 	mpfr_t original_item;
 	mpfr_t prod;
@@ -190,7 +235,11 @@ void generateSums(char** matrix, char** original_matrix, int l ) {
 			mpfr_add(acc, acc, m_term, MPFR_RNDN);
 		}
 		mpfr_log2(acc, acc, MPFR_RNDN);
-		mpfr_printf("\n%.128RNf\n", acc);
+		mpfr_exp_t expt;
+		char* result = mpfr_get_str(0, &expt, 10, 0, acc, MPFR_RNDN);
+		char* v = process(result, expt);
+		indexVector.push_back(v);
+		mpfr_printf("\n%.4096\n", acc);
 		mpfr_mul_ui(prod, prod, 10, MPFR_RNDN);
 	}
 	mpfr_clear(factor);
@@ -222,11 +271,16 @@ char* factorizeGT5(char* nn) {
 		original_matrix[i][l] = '\0';
 		std::rotate(original.rbegin(), original.rbegin() + 1, original.rend());
 	}
+#ifdef _DEBUG
 	cout <<"\nMatrix:\n";
 	print(matrix, l) ;
 	cout << "\nMask:\n";
 	print(original_matrix, l);
-	generateSums(matrix, original_matrix, l);
+#endif
+	vector<char*> indexVector;
+	generateSums(matrix, original_matrix, l, indexVector);
+	cout << "\nIndex Vector:\n";
+	print(indexVector);
 }
 
 char* factorizeLEQ5(char* nn) {
