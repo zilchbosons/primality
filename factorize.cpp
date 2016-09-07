@@ -189,6 +189,7 @@ void generateSums(char** matrix, char** original_matrix, int l ) {
 			mpfr_mul(m_term, m_term, original_term, MPFR_RNDN);
 			mpfr_add(acc, acc, m_term, MPFR_RNDN);
 		}
+		mpfr_log2(acc, acc, MPFR_RNDN);
 		mpfr_printf("\n%.128RNf\n", acc);
 		mpfr_mul_ui(prod, prod, 10, MPFR_RNDN);
 	}
