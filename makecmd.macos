@@ -1,5 +1,5 @@
 #g++  -ggdb -o factorize factorize.cpp -I./ -I/usr/include/x86_64-linux-gnu -lmpfr  -L/usr/lib/x86_64-linux-gnu -lboost_system -lgmp -lgmpxx
-clang++  -Ofast -o factorize factorize.cpp -I./ -lmpfr  -lboost_system -lgmp -lgmpxx
+clang++  -ggdb -o factorize factorize.cpp -I./ -lmpfr  -lboost_system -lgmp -lgmpxx
 #clang++  -ggdb -o primality -I./ -I./hiredis -lmpfr -levent -lhiredis -lboost_system -lgmp -lgmpxx primality.cpp
 #clang++ -Ofast  -o factorize -I./ -I./hiredis -lmpfr -levent -lhiredis -lboost_system -lgmp -lgmpxx factorize.cpp
 #clang++ -ggdb -o fact -I./ -I./hiredis -lmpfr -levent -lhiredis -lboost_system -lgmp -lgmpxx fact.cpp

@@ -43,21 +43,13 @@ const int _nmrk = 46938;
 
 int signature[5] = { -1, 2, 3, 1, -3 };
 
-void print(double* o, double* c, int l) {
-	for (int i = 0; i <l; ++i) {
-		if (o[i]>0 && c[i]>0) {
-			cout << "\ni:\t"<<i<<"\t"<<o[i] <<"\t,\t"<<c[i]<< "\n";
-		}
+void print(vector<std::pair<int, int> > closures) {
+	int sz = closures.size();
+	for (int i = 0; i < sz; ++i) {
+		std::pair<int, int> p = closures.at(i);
+		cout << p.first<<"\t,\t"<<p.second<<"\n";
 	}
-	cout << "\n";
-}
-
-
-void print(int* o, int l) {
-	for (int i = 0; i <l; ++i) {
-		cout << "\ni:\t"<<i<<"\t"<<o[i] << "\n";
-	}
-	cout << "\n";
+	cout <<"\n";
 }
 
 long double getMultiplier(int x, long int divisor) {
@@ -334,7 +326,7 @@ bool valid(char* s) {
 	return (dec == 0);
 }
 
-void get7Mods(double* o, double* c, char* nn) {
+void get7Mods(vector<std::pair<int, int> >& closures, char* nn) {
 	int l = strlen(nn);
 	for (int i = 0; i <l; ++i) {
 		int initial = i;
@@ -344,8 +336,11 @@ void get7Mods(double* o, double* c, char* nn) {
 			int nk = nn[initial] - '0';
 			str += boost::lexical_cast<std::string>(nk);
 			if (valid((char*)str.c_str())) {
-				o[initial] = _initial;
-				c[initial] = initial;
+				closures.push_back(std::make_pair(_initial, initial));
+				_initial = initial + 1;
+				++initial;
+				str  = "";
+				continue;
 			}
 			++initial;
 		}
@@ -365,16 +360,12 @@ int main() {
 	char* nn = strdup((char*) num.c_str());
 
 	int l = strlen(nn);
-	double* opening = new double[l];
-	double* closing = new double[l];
-	for (int i = 0; i < l; ++i) {
-		opening[i] = closing[i] = -1;
-	}
 
-	get7Mods(opening, closing, nn);
+	vector<std::pair<int, int> > closures;
+	get7Mods(closures,  nn);
 
 	cout <<"\nOpening/Closing:\n";
-	print(opening, closing,l);
+	print(closures);
 	if (l <= 5 && l>1) {
 		if (l < 5) {
 			char* factor = factorizeLEQ5(nn);
