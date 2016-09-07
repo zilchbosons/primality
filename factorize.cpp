@@ -23,6 +23,7 @@
 #include <string>
 #include <gmp.h>
 #include <gmpxx.h>
+#include <mpfr.h>
 #include <vector>
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
@@ -159,14 +160,58 @@ char* factorizeN(char* nn, int* mask, int sz) {
 	return strdup((char*) num2.c_str());
 }
 
+void generateSums(char** matrix, char** original_matrix, int l ) {
+	mpf_t m_item;
+	mpf_t original_item;
+	mpf_t prod;
+	mpfr_t acc;
+	mpf_t factor;
+	mpf_init(m_item);
+	mpf_init(original_item);
+	mpf_init(prod);
+	mpf_set_ui(prod, 10);
+	mpf_init(factor);
+	mpfr_init2(acc, 4096);
+	mpfr_set_si(acc, 0, MPFR_RNDN);
+	mpf_init(factor);
+	mpfr_t m_term;
+	mpfr_init2(m_term, 4096);
+	mpfr_t original_term;
+	mpfr_init2(original_term, 4096);
+	for (int i = 1; i < l - 1; ++i) {
+		mpfr_set_si(acc, 0, MPFR_RNDN);
+		for (int j = 0; j < l; ++j ) {
+			mpf_set_str(m_item, matrix[j], 10);
+			mpf_div(m_item, m_item, prod);
+			mpf_set_str(original_item, original_matrix[j], 10);
+			mpf_div(original_item, original_item, prod);
+			mpfr_set_f(m_term, m_item, MPFR_RNDN);
+			mpfr_log(m_term, m_term, MPFR_RNDN);
+			mpfr_set_f(original_term, original_item, MPFR_RNDN);
+			mpfr_log(original_term, original_term, MPFR_RNDN);
+			mpfr_mul(m_term, m_term, original_term, MPFR_RNDN);
+			mpfr_add(acc, acc, m_term, MPFR_RNDN);
+
+		}
+		mpf_mul_ui(prod, prod, 10);
+	}
+	mpf_clear(factor);
+	mpfr_clear(acc);
+	mpf_clear(prod);
+	mpf_clear(original_item);
+	mpf_clear(m_item);
+	mpfr_clear(m_term);
+	mpfr_clear(original_term);
+}
+
 char* factorizeGT5(char* nn) {
 	int l = strlen(nn);
 	vector<int> original;
 	for (int i = 0; i <l; ++i) {
 		original.push_back(eigen[i% 5]);
-	 }
+	}
 	char* matrix[l];
-char* original_matrix[l];
+	char* original_matrix[l];
 	for (int i = 0; i < l; ++i ) {
 		matrix[i] = new char[l+1];
 		original_matrix[i] = new char[l+1];
@@ -175,14 +220,15 @@ char* original_matrix[l];
 #ifdef _DEBUG
 		cout << "\noriginal:\t"<<toString(original)<<"\n";
 #endif
-original_matrix[i] = toString(original);
-original_matrix[i][l] = '\0';
+		original_matrix[i] = toString(original);
+		original_matrix[i][l] = '\0';
 		std::rotate(original.rbegin(), original.rbegin() + 1, original.rend());
 	}
 	cout <<"\nMatrix:\n";
 	print(matrix, l) ;
-cout << "\nMask:\n";
-print(original_matrix, l);
+	cout << "\nMask:\n";
+	print(original_matrix, l);
+	generateSums(matrix, original_matrix, l);
 }
 
 char* factorizeLEQ5(char* nn) {
