@@ -43,6 +43,13 @@ const int _nmrk = 46938;
 
 int signature[5] = { -1, 2, 3, 1, -3 };
 
+void print(int* o, int l) {
+	for (int i = 0; i <l; ++i) {
+		cout << "\ni:\t"<<i<<"\t"<<o[i] << "\n";
+	}
+	cout << "\n";
+}
+
 long double getMultiplier(int x, long int divisor) {
 	switch (x) {
 		case 0:
@@ -279,8 +286,10 @@ char* factorizeGT5(char* nn) {
 #endif
 	vector<char*> indexVector;
 	generateSums(matrix, original_matrix, l, indexVector);
+#ifdef _DEBUG
 	cout << "\nIndex Vector:\n";
 	print(indexVector);
+#endif
 }
 
 char* factorizeLEQ5(char* nn) {
@@ -302,6 +311,37 @@ char* factorizeLEQ5(char* nn) {
 	return ((char*)(boost::lexical_cast<std::string>(factor)).c_str());
 }
 
+bool valid(char* s) {
+	mpz_t ns;
+	mpz_init(ns);
+	mpz_set_str(ns, s, 10);
+	mpz_t rt;
+	mpz_init(rt);
+	mpz_mod_ui(rt, ns, 7);
+	bool dec = mpz_cmp_si(rt, 0);
+	mpz_clear(rt);
+	mpz_clear(ns);
+	return (dec == 0);
+}
+
+void get7Mods(int* o, int* c, char* nn) {
+	int l = strlen(nn);
+	for (int i = 0; i <l; ++i) {
+		int initial = i;
+		int _initial = initial;
+		std::string str = "";
+		while (initial < l) {
+			int nk = nn[initial] - '0';
+			str += boost::lexical_cast<std::string>(nk);
+			if (valid((char*)str.c_str())) {
+				o[_initial] = initial;
+				c[initial] = initial;
+			}
+			++initial;
+		}
+	}
+}
+
 int main() {
 	/* Step 1: Reading the Number to be factorized */
 	FILE* fp = fopen("./input.txt", "r");
@@ -313,7 +353,20 @@ int main() {
 	}
 	cout << "\nNumber read was : \t" << num <<"\n";
 	char* nn = strdup((char*) num.c_str());
+
 	int l = strlen(nn);
+	int* opening = new int[l];
+	int* closing = new int[l];
+	for (int i = 0; i < l; ++i) {
+		opening[i] = closing[i] = -1;
+	}
+
+	get7Mods(opening, closing, nn);
+
+	cout <<"\nOpening:\n";
+	print(opening, l);
+	cout <<"\nClosing:\n";
+	print(closing, l);
 	if (l <= 5 && l>1) {
 		if (l < 5) {
 			char* factor = factorizeLEQ5(nn);
