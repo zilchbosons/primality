@@ -43,6 +43,16 @@ const int _nmrk = 46938;
 
 int signature[5] = { -1, 2, 3, 1, -3 };
 
+void print(double* o, double* c, int l) {
+	for (int i = 0; i <l; ++i) {
+		if (o[i]>0 && c[i]>0) {
+			cout << "\ni:\t"<<i<<"\t"<<o[i] <<"\t,\t"<<c[i]<< "\n";
+		}
+	}
+	cout << "\n";
+}
+
+
 void print(int* o, int l) {
 	for (int i = 0; i <l; ++i) {
 		cout << "\ni:\t"<<i<<"\t"<<o[i] << "\n";
@@ -324,7 +334,7 @@ bool valid(char* s) {
 	return (dec == 0);
 }
 
-void get7Mods(int* o, int* c, char* nn) {
+void get7Mods(double* o, double* c, char* nn) {
 	int l = strlen(nn);
 	for (int i = 0; i <l; ++i) {
 		int initial = i;
@@ -334,7 +344,7 @@ void get7Mods(int* o, int* c, char* nn) {
 			int nk = nn[initial] - '0';
 			str += boost::lexical_cast<std::string>(nk);
 			if (valid((char*)str.c_str())) {
-				o[_initial] = initial;
+				o[initial] = _initial;
 				c[initial] = initial;
 			}
 			++initial;
@@ -355,18 +365,16 @@ int main() {
 	char* nn = strdup((char*) num.c_str());
 
 	int l = strlen(nn);
-	int* opening = new int[l];
-	int* closing = new int[l];
+	double* opening = new double[l];
+	double* closing = new double[l];
 	for (int i = 0; i < l; ++i) {
 		opening[i] = closing[i] = -1;
 	}
 
 	get7Mods(opening, closing, nn);
 
-	cout <<"\nOpening:\n";
-	print(opening, l);
-	cout <<"\nClosing:\n";
-	print(closing, l);
+	cout <<"\nOpening/Closing:\n";
+	print(opening, closing,l);
 	if (l <= 5 && l>1) {
 		if (l < 5) {
 			char* factor = factorizeLEQ5(nn);
