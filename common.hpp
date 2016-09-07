@@ -34,9 +34,9 @@ std::unordered_map<int, vector<int>* > riemann_hash;
 std::unordered_map<int, vector<int>* > _riemann_hash;
 
 struct Node {
-    int zero;
-    vector<int> digits;
-    Node* next;
+	int zero;
+	vector<int> digits;
+	Node* next;
 };
 
 unsigned long long int reverse_number(unsigned long long int n) {
@@ -48,6 +48,16 @@ unsigned long long int reverse_number(unsigned long long int n) {
 		t /= 10;
 	}
 	return sum;
+}
+
+int roundOff(long double x ) {
+	long double y = x + .4;
+	if ( y >= (floor(x) + 1)) {
+		y = x + 1;
+	} else {
+		y = x;
+	}
+	return floor(y);
 }
 
 bool isPrime(int x) {

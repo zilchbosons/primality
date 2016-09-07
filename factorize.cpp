@@ -36,6 +36,7 @@ const int nmrk = 69384;
 const int mrkn = 93846;
 const int rknm = 38469;
 const int knmr = 84693;
+const int _nmrk = 46938;
 
 #define divLT5 10000
 
@@ -44,29 +45,29 @@ int signature[5] = { -1, 2, 3, 1, -3 };
 long double getMultiplier(int x, long int divisor) {
 	switch (x) {
 		case 0:
-			return nmrk / divisor;
+			return (nmrk*.1 / divisor);
 			break;
 		case 1:
-			return mrkn / divisor;
+			return (mrkn*.1 / divisor);
 			break;
 
 		case 2:
-			return rknm / divisor;
+			return (rknm*.1 / divisor);
 			break;
 
 		case 3:
-			return knmr / divisor;
+			return (knmr*.1 / divisor);
 			break;
 
 		case 4:
-			return nmrk / divisor;
+			return (_nmrk*.1 / divisor);
 			break;
 
 		default:
-			return nmrk / divisor;
+			return (nmrk*.1 / divisor);
 			break;
 	}
-	return nmrk / divisor;
+	return (nmrk*.1 / divisor);
 }
 
 char* factorize(char* nn) {
@@ -93,14 +94,15 @@ char* factorizeLT5(char* nn) {
 	long double acc = 0;
 	int num = atoi(nn);
 	int l = strlen(nn);
-	long int mult = divLT5 / pow(10, l-1);
+	long int mult = divLT5 / pow(10, l);
 	for (int i = 0 ; i < 5; ++i) {
 		long double term = (num + signature[i] > 9)? ((num-10) + signature[i]):((num + signature[i]) <0) ? ((10-num)+signature[i]):(num + signature[i]);
+		if (term == 0) term = 29;
 		long double multiplier = getMultiplier(i, mult);
 		acc += log(term)*log(multiplier);
 	}
 	acc = log(acc);
-	std::string result = boost::lexical_cast<std::string>(floor(acc));
+	std::string result = boost::lexical_cast<std::string>(roundOff(acc));
 	return strdup((char*) result.c_str());
 }
 
@@ -111,13 +113,13 @@ char* factorizeEQ5(char* nn) {
 	long double acc = log(num3)*log(69384);
 	mpz_t at;
 	mpz_init(at);
-	mpz_set_ui(at, floor(acc));
+	mpz_set_ui(at, roundOff(acc));
 	char* fctr = strdup(mpz_get_str(0, 10, at));
 	mpz_clear(at);
 	char* factor2 = factorizeLT5(fctr);
 	int corr =atoi(factor2);
 	acc += corr;
-	char* factor = strdup((char*) boost::lexical_cast<std::string>(floor(acc)).c_str());
+	char* factor = strdup((char*) boost::lexical_cast<std::string>(roundOff(acc)).c_str());
 	return factor;
 }
 
