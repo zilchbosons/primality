@@ -164,17 +164,25 @@ char* factorizeGT5(char* nn) {
 	vector<int> original;
 	for (int i = 0; i <l; ++i) {
 		original.push_back(eigen[i% 5]);
-	}
+	 }
 	char* matrix[l];
+char* original_matrix[l];
 	for (int i = 0; i < l; ++i ) {
 		matrix[i] = new char[l+1];
+		original_matrix[i] = new char[l+1];
 		matrix[i] = factorizeN(nn, toMask(toString(original)), original.size());
 		matrix[i][l] = '\0';
+#ifdef _DEBUG
 		cout << "\noriginal:\t"<<toString(original)<<"\n";
+#endif
+original_matrix[i] = toString(original);
+original_matrix[i][l] = '\0';
 		std::rotate(original.rbegin(), original.rbegin() + 1, original.rend());
 	}
 	cout <<"\nMatrix:\n";
 	print(matrix, l) ;
+cout << "\nMask:\n";
+print(original_matrix, l);
 }
 
 char* factorizeLEQ5(char* nn) {
