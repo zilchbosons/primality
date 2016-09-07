@@ -51,7 +51,7 @@ unsigned long long int reverse_number(unsigned long long int n) {
 }
 
 int roundOff(long double x ) {
-	long double y = x + .4;
+	long double y = x + .5;
 	if ( y >= (floor(x) + 1)) {
 		y = x + 1;
 	} else {

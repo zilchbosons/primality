@@ -70,10 +70,10 @@ long double getMultiplier(int x, long int divisor) {
 	return (nmrk*.1 / divisor);
 }
 
-char* factorize(char* nn) {
+char* factorize(char* nn, int l, int offset) {
 	int num = atoi(nn);
 	std::string num2 = "";
-	for (int i = 0 ; i < 5; ++i) {
+	for (int i = offset ; i < l; ++i) {
 		int nk = nn[i] - '0';
 		if (nk + signature[i] > 9) {
 			nk = (nk-10) +  signature[i];
@@ -96,7 +96,7 @@ char* factorizeEQ1(char* nn) {
 	int l = strlen(nn);
 	long int mult = divLT5 / pow(10, l);
 	for (int i = 0 ; i < 5; ++i) {
-		long double term = (num + signature[i] > 9)? ((num-10) + signature[i]):((num + signature[i]) <0) ? ((10-num)+signature[i]):(num + signature[i]);
+		int term = atoi(factorize(nn, i, l));
 		if (term == 0) term = 29;
 		long double multiplier = getMultiplier(i, mult);
 		acc += log(term)*log(multiplier);
@@ -108,32 +108,9 @@ char* factorizeEQ1(char* nn) {
 
 std::string gFac = "";
 char* factorizeEQ5(char* nn) {
-	char*  snum3 = factorize(nn);
+	char*  snum3 = factorize(nn, 0, 5);
 	long int num3 = atoi(snum3);
 	long double acc = log(num3)*log(69384);
-	mpz_t at;
-	mpz_init(at);
-	mpz_set_ui(at, roundOff(acc));
-	char* fctr = strdup(mpz_get_str(0, 10, at));
-	mpz_clear(at);
-	char* factor2 = factorizeEQ1(fctr);
-	int corr =atoi(factor2);
-	acc += corr;
-	char* factor = strdup((char*) boost::lexical_cast<std::string>(roundOff(acc)).c_str());
-	return factor;
-}
-
-char* factorize125(char* nn) {
-	long double acc = 0;
-	int num = atoi(nn);
-	int l = strlen(nn);
-	long int mult = divLT5 / pow(10, l);
-	for (int i = 0 ; i < 5; ++i) {
-		long double term = (num + signature[i] > 9)? ((num-10) + signature[i]):((num + signature[i]) <0) ? ((10-num)+signature[i]):(num + signature[i]);
-		if (term == 0) term = 29;
-		long double multiplier = getMultiplier(i, mult);
-		acc += log(term)*log(multiplier);
-	}
 	mpz_t at;
 	mpz_init(at);
 	mpz_set_ui(at, roundOff(acc));
@@ -167,17 +144,11 @@ int main() {
 		if (factor) {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
-	} else  if (l == 1) {
+	} else  if (l < 5) {
 		char* factor = factorizeEQ1(nn);
 		if (factor) {
 			cout << "\nFactor:\t"<<factor<<"\n";
 		}
-	} else if (l >1 && l < 5) {
-		char* factor = factorize125(nn);
-		if (factor) {
-			cout << "\nFactor:\t"<<factor<<"\n";
-		}
-
 	} else {
 		std::string factor = factorizeGT1(nn, 0, l);
 		cout << "\nFactor:\t"<<factor<<"\n";
