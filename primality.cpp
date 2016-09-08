@@ -39,6 +39,10 @@ bool isPrime(char* nn) {
 		int nk = atoi(nn);
 		if (nk == 2) {
 			return true;
+		} else if (nk <= 5) {
+			if (nk == 3 || nk == 5) {
+				return true;
+			}
 		}
 	}
 	mpz_t nt;
@@ -52,23 +56,54 @@ bool isPrime(char* nn) {
 	mpz_sub_ui(n_previous, nt, 1);
 	mpz_mul(n_next, n_next, n_next);
 	mpz_mul(n_previous, n_previous, n_previous);
+	mpz_mul(nt, nt, nt);
 	mpz_t result;
 	mpz_init(result);
-	mpz_sub(result, n_next, n_previous);
+	mpz_sub(result, n_next, nt);
+	mpz_add_ui(result, result, 29*29);
 	mpz_t rt;
 	mpz_init(rt);
 	mpz_mod_ui(rt, result, 7);
 	int rem = mpz_get_ui(rt);
+	mpz_t result2;
+	mpz_init(result2);
+	mpz_sub(result2, nt, n_previous);
+	mpz_add_ui(result2, result2, 29*29);
+	mpz_t rt2;
+	mpz_init(rt2);
+	mpz_mod_ui(rt2, result2, 7);
+	int rem2 = mpz_get_ui(rt2);
+	int n1 = nn[0] -'0';
 	mpz_clear(nt);
 	mpz_clear(n_next);
 	mpz_clear(n_previous);
+	mpz_clear(result2);
+	mpz_clear(rt2);
 	mpz_clear(result);
 	mpz_clear(rt);
 
-	if (rem == 2 || rem == 3 || rem == 5) {
-		return true;
+	if (n1 == 2 || n1 == 4) {
+		if (rem == 0 || rem2 == 0) {
+			//not prime
+			return false;
+		} else if ((rem == 6 || rem2 == 6) && (rem ==1 || rem2 ==1)) {
+			return true;
+		} else if ((rem != 5 && rem2 != 5 && rem != 3 && rem2 != 3)) {
+			return true;
+		} else {
+			return false;
+		}
 	} else {
-		return false;
+		if (rem == 0 || rem2 == 0) {
+			//not prime
+			return true;
+		} else if ((rem == 6 || rem2 == 6) && (rem ==1 || rem2 ==1)) {
+			return false;
+		} else if ((rem == 5 &&  rem2  == 3) ||  (rem == 3 && rem2 == 5)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 
