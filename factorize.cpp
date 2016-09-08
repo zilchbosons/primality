@@ -360,11 +360,13 @@ int main() {
 
 	int l = strlen(nn);
 
+#ifdef _DEBUG
 	vector<std::pair<int, int> > closures;
 	get7Mods(closures,  nn);
 
 	cout <<"\nOpening/Closing:\n";
 	print(closures);
+#endif
 	if (l <= 5 && l>1) {
 		if (l < 5) {
 			char* factor = factorizeLEQ5(nn);
