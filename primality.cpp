@@ -32,107 +32,44 @@
 
 using namespace std;
 
-bool divisors[4] = {2, 3, 5, 7};
 
-bool valid(char* s) {
-	mpz_t r ;
-	mpz_init(r);
-	mpz_set_str(r, s, 10);
-	mpz_t rem;
-	mpz_init(rem);
-	mpz_mod_ui(rem, r, 2);
-	if (mpz_cmp_si(rem, 0)==0) return true;
-	mpz_mod_ui(rem, r, 3);
-	if (mpz_cmp_si(rem, 0)==0) return true;
-	mpz_mod_ui(rem, r, 5);
-	if (mpz_cmp_si(rem, 0)==0) return true;
-	mpz_mod_ui(rem, r, 7);
-	mpz_clear(r);
-	if (mpz_cmp_si(rem, 0)==0) return true;
-	mpz_clear(rem);
-	return false;
-}
-
-bool isPrimeHelper(char* nn, char* cc) {
-	mpz_t nt;
-	mpz_init(nt);
-	mpz_set_str(nt, nn, 10);
-	mpz_mul(nt, nt, nt);
-	mpz_t resultant;
-	mpz_init(resultant);
-	for (int i = 0; i < 3; ++i) {
-		int ck = cc[i] - '0';
-		switch(i) {
-			case 0:
-				if (ck) {
-					mpz_add_ui(resultant, nt, 1); 
-				} else {
-					if (mpz_cmp_ui(nt, 1)<0) {
-						mpz_set_si(resultant, 0);
-					} else {
-						mpz_sub_ui(resultant, nt, 1);
-					} 
-				}
-				break;
-			case 1:
-				if (ck) {
-					mpz_add_ui(resultant, nt, 9); 
-				} else {
-					if (mpz_cmp_ui(nt, 9)<0) {
-						mpz_set_si(resultant, 0);
-					} else {
-						mpz_sub_ui(resultant, nt, 9); 
-					}
-				}
-				break;
-			case 2:
-				if (ck) {
-					mpz_add_ui(resultant, nt, 4); 
-				} else {
-					if (mpz_cmp_ui(nt, 4)<0) {
-						mpz_set_si(resultant, 0);
-					} else {
-						mpz_sub_ui(resultant, nt, 4); 
-					}
-				}
-				break;
-			default:
-				break;
-		}
-		if (!valid(strdup(mpz_get_str(0, 10, resultant)))) {
+bool isPrime(char* nn) {
+	int l = strlen(nn);
+	if (l ==1) {
+		int nk = atoi(nn);
+		if (nk == 2) {
 			return true;
 		}
 	}
+	mpz_t nt;
+	mpz_init(nt);
+	mpz_set_str(nt, nn, 10);
+	mpz_t n_next;
+	mpz_init(n_next);
+	mpz_add_ui(n_next, nt, 1);
+	mpz_t n_previous;
+	mpz_init(n_previous);
+	mpz_sub_ui(n_previous, nt, 1);
+	mpz_mul(n_next, n_next, n_next);
+	mpz_mul(n_previous, n_previous, n_previous);
+	mpz_t result;
+	mpz_init(result);
+	mpz_sub(result, n_next, n_previous);
+	mpz_t rt;
+	mpz_init(rt);
+	mpz_mod_ui(rt, result, 7);
+	int rem = mpz_get_ui(rt);
 	mpz_clear(nt);
-	mpz_clear(resultant);
-return false;
-}
+	mpz_clear(n_next);
+	mpz_clear(n_previous);
+	mpz_clear(result);
+	mpz_clear(rt);
 
-char* dec2bin(int x) {
-	std::string str = "";
-if (x == 0) {
-str = "000";
-} else {
-	while (x > 0) {
-		str += boost::lexical_cast<std::string>(x % 2) ;
-		x /= 2;
+	if (rem == 2 || rem == 3 || rem == 5) {
+		return true;
+	} else {
+		return false;
 	}
-}
-	char* r = reverse_string((char*)str.c_str());
-	return r;
-}
-
-bool isPrime(char* nn) {
-	int np = 0; 
-	for (int i = 0; i < 7; ++i)  {
-		char* cc = dec2bin(i);
-		bool p = isPrimeHelper(nn, cc);
-		if (!p) {
-			++np;
-		} 
-	}
-	if (np > 4) return false;
-	else return true;
 }
 
 int main() {
