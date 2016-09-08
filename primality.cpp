@@ -60,7 +60,6 @@ bool isPrimeHelper(char* nn, char* cc) {
 	mpz_mul(nt, nt, nt);
 	mpz_t resultant;
 	mpz_init(resultant);
-	int np = 0;
 	for (int i = 0; i < 3; ++i) {
 		int ck = cc[i] - '0';
 		switch(i) {
@@ -100,22 +99,25 @@ bool isPrimeHelper(char* nn, char* cc) {
 			default:
 				break;
 		}
-		if (valid(strdup(mpz_get_str(0, 10, resultant)))) {
-			++np;
+		if (!valid(strdup(mpz_get_str(0, 10, resultant)))) {
+			return true;
 		}
 	}
 	mpz_clear(nt);
 	mpz_clear(resultant);
-	if (np>1) return false;
-	else return true;
+return false;
 }
 
 char* dec2bin(int x) {
 	std::string str = "";
+if (x == 0) {
+str = "000";
+} else {
 	while (x > 0) {
-		str += boost::lexical_cast<std::string>(x % 10) ;
-		x /= 10;
+		str += boost::lexical_cast<std::string>(x % 2) ;
+		x /= 2;
 	}
+}
 	char* r = reverse_string((char*)str.c_str());
 	return r;
 }
