@@ -21,7 +21,6 @@
  **********************************************************************************/
 
 #include <boost/lexical_cast.hpp>
-#include <unordered_map>
 
 using namespace std;
 using namespace boost;
@@ -30,8 +29,6 @@ int primes[25] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59
 
 enum sequence { one=1, three=3, two=2 } seq;
 
-std::unordered_map<int, vector<int>* > riemann_hash;
-std::unordered_map<int, vector<int>* > _riemann_hash;
 
 struct Node {
 	int zero;
@@ -60,6 +57,7 @@ int roundOff(long double x ) {
 	return floor(y);
 }
 
+#if 0
 bool isPrime(int x) {
 	switch (x) {
 		case 2:
@@ -93,8 +91,10 @@ bool isPrime(int x) {
 	}
 	return false;
 }
+#endif
 
 
+#if 0
 int countPrimes(int x, int y) {
 	int count = 0;
 	for (int i = x + 1; i < y; ++i) {
@@ -105,6 +105,7 @@ int countPrimes(int x, int y) {
 #endif
 	return count;
 }
+#endif
 
 char* reverse_string(char* t) {
 	char* s = strdup(t); 

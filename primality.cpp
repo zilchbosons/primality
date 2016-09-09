@@ -46,64 +46,54 @@ bool isPrime(char* nn) {
 		}
 	}
 	mpz_t nt;
+	mpz_t nz1;
+	mpz_init(nz1);
+	mpz_t nz2;
+	mpz_init(nz2);
+	mpz_t term;
+	mpz_init(term);
+	mpz_t term2;
+	mpz_init(term2);
 	mpz_init(nt);
 	mpz_set_str(nt, nn, 10);
-	mpz_t n_next;
-	mpz_init(n_next);
-	mpz_add_ui(n_next, nt, 1);
-	mpz_t n_previous;
-	mpz_init(n_previous);
-	mpz_sub_ui(n_previous, nt, 1);
-	mpz_mul(n_next, n_next, n_next);
-	mpz_mul(n_previous, n_previous, n_previous);
-	mpz_mul(nt, nt, nt);
-	mpz_t result;
-	mpz_init(result);
-	mpz_sub(result, n_next, nt);
-	mpz_add_ui(result, result, 29*29);
-	mpz_t rt;
-	mpz_init(rt);
-	mpz_mod_ui(rt, result, 7);
-	int rem = mpz_get_ui(rt);
-	mpz_t result2;
-	mpz_init(result2);
-	mpz_sub(result2, nt, n_previous);
-	mpz_add_ui(result2, result2, 29*29);
-	mpz_t rt2;
-	mpz_init(rt2);
-	mpz_mod_ui(rt2, result2, 7);
-	int rem2 = mpz_get_ui(rt2);
-	int n1 = nn[0] -'0';
+	mpfr_t nz;
+	mpfr_t n1;
+	mpfr_init2(n1, 4096);
+	mpfr_t n2;
+	mpfr_init2(n2, 4096);
+	mpfr_init2(nz, 4096);
+	mpfr_set_str(nz, nn, 10, MPFR_RNDN);
+	mpfr_log2(nz, nz, MPFR_RNDN);
+	mpfr_floor(nz, nz);
+	mpfr_get_z(nz1, nz, MPFR_RNDN);
+	mpz_add_ui(nz1, nz1, 1);
+	mpfr_get_z(nz2, nz, MPFR_RNDN);
+	mpz_sub_ui(nz2, nz2, 1);
+	mpz_mul(nz1, nz1, nz1);
+	mpz_mul(nz2, nz2, nz2);
+	mpz_sub(nt, nz1, nz2);
+	mpz_set_str(term, nn, 10);
+	mpz_t constant1;
+	mpz_init(constant1);
+	mpz_set_str(constant1, "69384", 10);
+	mpz_mul(term, term, constant1);
+	mpz_add(term, term, nt);
+	mpz_sqrt(term2, term);
+	mpz_mul(term2, term2, term2);
+	mpz_sub(term, term, term2);
+	mpz_mod_ui(term, term, 7);
+	mpz_clear(nz1);
+	mpz_clear(nz2);
+	mpz_clear(constant1);
 	mpz_clear(nt);
-	mpz_clear(n_next);
-	mpz_clear(n_previous);
-	mpz_clear(result2);
-	mpz_clear(rt2);
-	mpz_clear(result);
-	mpz_clear(rt);
-
-	if (n1 == 2 || n1 == 4) {
-		if (rem == 0 || rem2 == 0) {
-			//not prime
-			return false;
-		} else if ((rem == 6 || rem2 == 6) && (rem ==1 || rem2 ==1)) {
-			return true;
-		} else if ((rem != 5 && rem2 != 5 && rem != 3 && rem2 != 3)) {
-			return true;
-		} else {
-			return false;
-		}
+	mpz_clear(term2);
+	mpfr_clear(nz);
+	mpfr_clear(n1);
+	mpfr_clear(n2);
+	if (mpz_cmp_ui(term, 3)<0) {
+		return false;
 	} else {
-		if (rem == 0 || rem2 == 0) {
-			//not prime
-			return true;
-		} else if ((rem == 6 || rem2 == 6) && (rem ==1 || rem2 ==1)) {
-			return false;
-		} else if ((rem == 5 &&  rem2  == 3) ||  (rem == 3 && rem2 == 5)) {
-			return true;
-		} else {
-			return false;
-		}
+		return true;
 	}
 }
 
