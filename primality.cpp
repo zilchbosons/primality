@@ -97,9 +97,9 @@ bool isPrime(char* nn) {
 	}
 }
 
-#if 0
 
-int main() {
+#if 0
+int main(int, char**) {
 	/* Step 1: Reading the Number to be factorized */
 	FILE* fp = fopen("./input.txt", "r");
 	std::string num = "";
