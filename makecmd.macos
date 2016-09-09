@@ -1,4 +1,8 @@
 #g++  -ggdb -o factorize factorize.cpp -I./ -I/usr/include/x86_64-linux-gnu -lmpfr  -L/usr/lib/x86_64-linux-gnu -lboost_system -lgmp -lgmpxx
+clang++ -c -fPIC primality.cpp
+swig -c++ -python primality.i
+clang++ -c -fPIC primality_wrap.cxx -I/usr/local/include/python2.6/ -I./
+clang++ -shared  -o _primality.so primality.o primality_wrap.o -lmpfr -lgmp -lpython
 clang++  -Ofast -o primality primality.cpp -I./ -lmpfr  -lboost_system -lgmp -lgmpxx
 #clang++  -ggdb -o factorize factorize.cpp -I./ -lmpfr  -lboost_system -lgmp -lgmpxx
 #clang++  -ggdb -o primality -I./ -I./hiredis -lmpfr -levent -lhiredis -lboost_system -lgmp -lgmpxx primality.cpp
