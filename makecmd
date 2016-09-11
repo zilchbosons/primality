@@ -1,3 +1,7 @@
+g++ -c  -fPIC primality.cpp
+swig -c++ -python primality.i
+g++ -c  -fPIC  primality_wrap.cxx  -I/usr/include/python2.7/
+g++ -shared   -fPIC  -o _primality.so primality.o primality_wrap.o -lmpfr -lgmp -lpython2.7 -I/usr/include/python2.7/ -L/usr/lib/x86_64-linux-gnu/ 
 #g++  -ggdb -o factorize factorize.cpp -I./ -I/usr/include/x86_64-linux-gnu -lmpfr  -L/usr/lib/x86_64-linux-gnu -lboost_system -lgmp -lgmpxx
 g++  -Ofast -o factorize factorize.cpp -I./ -I/usr/include/x86_64-linux-gnu -lmpfr  -L/usr/lib/x86_64-linux-gnu -lboost_system -lgmp -lgmpxx
 #g++  -ggdb -o primality primality.cpp -I./ -I/usr/include/x86_64-linux-gnu -lmpfr  -L/usr/lib/x86_64-linux-gnu -lboost_system -lgmp -lgmpxx
