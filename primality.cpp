@@ -39,53 +39,37 @@ bool isPrime(char* nn) {
 	mpz_init(nt);
 	mpz_t rt;
 	mpz_init(rt);
+	mpz_t _qt;
+	mpz_init(_qt);
 	mpz_t qt;
 	mpz_init(qt);
 	int initial = 7;
-
 	mpz_set_str(nt, nn, 10);
-	long long int racc = 0;
-	mpz_t acc;
-	mpz_init(acc);
-	mpz_set_si(acc, 0);
 	while (1) {
 		mpz_mod_ui(rt, nt, initial);
 		mpz_div_ui(qt, nt, initial);
-		if (mpz_cmp_si(rt, 1) <=0) {
-			mpz_add(acc, acc, qt);
-			int zt = mpz_get_ui(rt);
-			if (zt == 0) racc += initial;
-			else
-				racc += zt;
-			gmp_printf("1===> \t%Zd\t%Zd\n", qt, rt);
-			gmp_printf("\n1===> \t%Zd\t%s\n", nt, nn);
-			break;
+		gmp_printf("\n%Zd\t%Zd\t%d\n",qt, rt, initial);
+		mpz_add_ui(_qt, qt, initial);
+		if (mpz_cmp_si(rt, 0)==0) {
+			mpz_mul_ui(_qt, _qt, 7);
 		} else {
-			mpz_add(acc, acc, qt);
-			int zt = mpz_get_ui(rt);
-			initial = zt;
-			racc += zt;
-			mpz_set(nt, qt);
+			mpz_mul(_qt, _qt, rt);
 		}
-		gmp_printf("2====> \t%Zd\t%Zd\n", nt, rt);
-	}
-	mpz_add_ui(acc, acc, racc);
-	if (mpz_cmp_ui(acc, 100)<0) { 
-		int pt = mpz_get_ui(acc);
-		cout <<"\nPT lt 100:\t"<<pt<<"\n";
-		int rpt = reverse_number(pt);
-		if ((common::_isPrime((int)pt)) || (common::_isPrime((int)rpt)))  {
+	if (mpz_cmp_ui(_qt , 100)<0) {
+		int zt = mpz_get_ui(_qt);
+		if (common::_isPrime(zt) || _riemannExists(zt)) {
 			return true;
 		} else {
 			return false;
 		}
 	} else {
-		gmp_printf("%Zd\n", acc);
-		return isPrime(strdup(mpz_get_str(0, 10, acc)));
+		gmp_printf("\n%Zd\t%Zd\t%d\n",qt, rt, initial);
+		mpz_set(nt, qt);
 	}
-	mpz_clear(qt);
-	mpz_clear(rt);        
-	mpz_clear(nt); 
+}
+mpz_clear(qt);
+mpz_clear(rt);        
+mpz_clear(nt); 
 
 }
 
