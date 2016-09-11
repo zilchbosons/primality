@@ -31,74 +31,66 @@
 #include "common.hpp"
 
 using namespace std;
+using namespace common;
 
 
 bool isPrime(char* nn) {
-	int l = strlen(nn);
-	if (l ==1) {
-		int nk = atoi(nn);
-		if (nk == 2) {
-			return true;
-		} else if (nk <= 5) {
-			if (nk == 3 || nk == 5) {
-				return true;
-			}
-		}
-	}
-	mpz_t nt;
-	mpz_t nz1;
-	mpz_init(nz1);
-	mpz_t nz2;
-	mpz_init(nz2);
-	mpz_t term;
-	mpz_init(term);
-	mpz_t term2;
-	mpz_init(term2);
+	mpz_t nt ;
 	mpz_init(nt);
+	mpz_t rt;
+	mpz_init(rt);
+	mpz_t qt;
+	mpz_init(qt);
+	int initial = 7;
+
 	mpz_set_str(nt, nn, 10);
-	mpfr_t nz;
-	mpfr_t n1;
-	mpfr_init2(n1, 4096);
-	mpfr_t n2;
-	mpfr_init2(n2, 4096);
-	mpfr_init2(nz, 4096);
-	mpfr_set_str(nz, nn, 10, MPFR_RNDN);
-	mpfr_log2(nz, nz, MPFR_RNDN);
-	mpfr_floor(nz, nz);
-	mpfr_get_z(nz1, nz, MPFR_RNDN);
-	mpz_add_ui(nz1, nz1, 1);
-	mpfr_get_z(nz2, nz, MPFR_RNDN);
-	mpz_sub_ui(nz2, nz2, 1);
-	mpz_mul(nz1, nz1, nz1);
-	mpz_mul(nz2, nz2, nz2);
-	mpz_sub(nt, nz1, nz2);
-	mpz_set_str(term, nn, 10);
-	mpz_t constant1;
-	mpz_init(constant1);
-	mpz_set_str(constant1, "69384", 10);
-	mpz_mul(term, term, constant1);
-	mpz_add(term, term, nt);
-	mpz_sqrt(term2, term);
-	mpz_mul(term2, term2, term2);
-	mpz_sub(term, term, term2);
-	mpz_mod_ui(term, term, 7);
-	mpz_clear(nz1);
-	mpz_clear(nz2);
-	mpz_clear(constant1);
-	mpz_clear(nt);
-	mpz_clear(term2);
-	mpfr_clear(nz);
-	mpfr_clear(n1);
-	mpfr_clear(n2);
-	if (mpz_cmp_ui(term, 3)<0) {
-		return false;
-	} else {
-		return true;
+	long long int racc = 0;
+	mpz_t acc;
+	mpz_init(acc);
+	mpz_set_si(acc, 0);
+	while (1) {
+		mpz_mod_ui(rt, nt, initial);
+		mpz_div_ui(qt, nt, initial);
+		if (mpz_cmp_si(rt, 1) <=0) {
+			mpz_add(acc, acc, qt);
+			int zt = mpz_get_ui(rt);
+			if (zt == 0) racc += initial;
+			else
+				racc += zt;
+			gmp_printf("1===> \t%Zd\t%Zd\n", qt, rt);
+			gmp_printf("\n1===> \t%Zd\t%s\n", nt, nn);
+			break;
+		} else {
+			mpz_add(acc, acc, qt);
+			int zt = mpz_get_ui(rt);
+			initial = zt;
+			racc += zt;
+			mpz_set(nt, qt);
+		}
+		gmp_printf("2====> \t%Zd\t%Zd\n", nt, rt);
 	}
+	mpz_add_ui(acc, acc, racc);
+	if (mpz_cmp_ui(acc, 100)<0) { 
+		int pt = mpz_get_ui(acc);
+		cout <<"\nPT lt 100:\t"<<pt<<"\n";
+		int rpt = reverse_number(pt);
+		if ((common::_isPrime((int)pt)) || (common::_isPrime((int)rpt)))  {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		gmp_printf("%Zd\n", acc);
+		return isPrime(strdup(mpz_get_str(0, 10, acc)));
+	}
+	mpz_clear(qt);
+	mpz_clear(rt);        
+	mpz_clear(nt); 
+
 }
 
 
-#if 0
+//#if 0
 int main(int, char**) {
 	/* Step 1: Reading the Number to be factorized */
 	FILE* fp = fopen("./input.txt", "r");
@@ -113,7 +105,7 @@ int main(int, char**) {
 
 	int l = strlen(nn);
 
-	bool prime = isPrime(nn);
+	bool prime = isPrime((char*)nn);
 	if (prime) {
 		cout << nn <<"\t is Prime.\n";
 	} else {
@@ -123,4 +115,4 @@ int main(int, char**) {
 	free(nn);
 	return 0;
 }
-#endif
+//#endif

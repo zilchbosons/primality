@@ -36,6 +36,8 @@ struct Node {
 	Node* next;
 };
 
+namespace common {
+
 unsigned long long int reverse_number(unsigned long long int n) {
 	if (n < 10) return n*10;
 	unsigned long long int t = n;
@@ -57,8 +59,7 @@ int roundOff(long double x ) {
 	return floor(y);
 }
 
-#if 0
-bool isPrime(int x) {
+bool _isPrime(int x) {
 	switch (x) {
 		case 2:
 		case 3:
@@ -91,7 +92,6 @@ bool isPrime(int x) {
 	}
 	return false;
 }
-#endif
 
 
 #if 0
@@ -171,3 +171,4 @@ bool _riemannExists(int x) {
 }
 
 #endif
+}
