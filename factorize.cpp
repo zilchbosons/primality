@@ -68,22 +68,22 @@ void factorizeByTrialMultiplication(void* _nn)  {
 	mpz_init(rt);
 	mpz_t sqt;
 	mpz_init(sqt);
-mpz_t term;
-mpz_init(term);
-mpz_t term2;
-mpz_init(term2);
+	mpz_t term;
+	mpz_init(term);
+	mpz_t term2;
+	mpz_init(term2);
 	while (1) {
-mpz_mul(term, ct,ct);
+		mpz_mul(term, ct,ct);
 		mpz_sub(rt, term, st);
 		mpz_sqrt(sqt, rt);
-mpz_set(term2, sqt);
+		mpz_set(term2, sqt);
 		mpz_mul(sqt, sqt, sqt);
 		mpz_sub(sqt, rt, sqt);
 		mpz_abs(sqt, sqt);
 		if (mpz_cmp_si(sqt, 0)==0) {
 			mpz_sub(ct, ct, nt);
-mpz_sub(term2, term2, nt);
-gmp_printf("\n%Zd\t%Zd\n", ct, term2);
+			mpz_sub(term2, term2, nt);
+			gmp_printf("\n%Zd\t%Zd\n", ct, term2);
 			mpz_add(ct, ct, term2);
 			cout << "\nFactor2:\t"<< strdup((char*) mpz_get_str(0,10, ct))<<"\n";
 			exit(0);
@@ -109,9 +109,9 @@ int main() {
 	int l = strlen(nn);
 
 	pthread_t thread1, thread2;
-//	pthread_create(&thread1, NULL, (void*(*)(void*) ) &factorizeByTrialDivision,  nn);
+	pthread_create(&thread1, NULL, (void*(*)(void*) ) &factorizeByTrialDivision,  nn);
 	pthread_create(&thread2, NULL, (void*(*)(void*) ) &factorizeByTrialMultiplication, nn);
-//	pthread_join(thread1, NULL);
+	pthread_join(thread1, NULL);
 	pthread_join(thread2, NULL);
 	fclose(fp);
 	free(nn);
