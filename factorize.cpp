@@ -42,7 +42,7 @@ void factorizeByTrialDivision(char* nn) {
 	while ( mpz_cmp_si(ct, 1) > 0) {
 		mpz_mod(rt, nt, ct);
 		if (mpz_cmp_si(rt, 0)==0) {
-			cout << "\nFactor:\t"<< strdup(mpz_get_str(0,10,ct))<<"\n";
+			cout << "\nFactor1:\t"<< strdup(mpz_get_str(0,10,ct))<<"\n";
 			exit(0);
 		}
 		mpz_sub_ui(ct, ct, 1);
@@ -76,7 +76,7 @@ void factorizeByTrialMultiplication(char* nn)  {
 			mpz_sub(ct, ct, nt);
 			mpz_sub(sqt, nt, sqt);
 			mpz_add(ct, ct, sqt);
-			cout << "\nFactor:\t"<< strdup((char*) mpz_get_str(0,10, ct))<<"\n";
+			cout << "\nFactor2:\t"<< strdup((char*) mpz_get_str(0,10, ct))<<"\n";
 			exit(0);
 		}
 		mpz_add_ui(ct,ct, 1);
